@@ -15,21 +15,21 @@ from sklearn.metrics import confusion_matrix
 from sklearn import metrics
 %matplotlib inline
 
-colname = ['Player', 'Position', 'School', 'College', 'Height', 'Weight', '40Yard', 'Vertical', 'Bench', 'Broad', '3Cone', 'Shuttle', 'Drafted']
+combine10 = pd.read_csv("Files\combine2010.csv")
+combine11 = pd.read_csv("Files\combine2011.csv")
+combine12 = pd.read_csv("Files\combine2012.csv")
+combine13 = pd.read_csv("Files\combine2013.csv")
+combine14 = pd.read_csv("Files\combine2014.csv")
+combine15 = pd.read_csv("Files\combine2015.csv")
+combine16 = pd.read_csv("Files\combine2016.csv")
+combine17 = pd.read_csv("Files\combine2017.csv")
+combine18 = pd.read_csv("Files\combine2018.csv")
+combine19 = pd.read_csv("Files\combine2019.csv")
+combine20 = pd.read_csv("Files\combine2020.csv")
 
-combine10 = pd.read_csv("combine2010.csv", names=colname, header = 0)
-combine11 = pd.read_csv("combine2011.csv", names=colname, header = 0)
-combine12 = pd.read_csv("combine2012.csv", names=colname, header = 0)
-combine13 = pd.read_csv("combine2013.csv", names=colname, header = 0)
-combine14 = pd.read_csv("combine2014.csv", names=colname, header = 0)
-combine15 = pd.read_csv("combine2015.csv", names=colname, header = 0)
-combine16 = pd.read_csv("combine2016.csv", names=colname, header = 0)
-combine17 = pd.read_csv("combine2017.csv", names=colname, header = 0)
-combine18 = pd.read_csv("combine2018.csv", names=colname, header = 0)
-combine19 = pd.read_csv("combine2019.csv", names=colname, header = 0)
-combine20 = pd.read_csv("combine2020.csv", names=colname, header = 0)
 
 df = pd.concat([combine12,combine13,combine14,combine15,combine16,combine17,combine18,combine18,combine20])
+df.columns = ['Player', 'Position', 'School', 'College', 'Height', 'Weight', '40Yard', 'Vertical', 'Bench', 'Broad', '3Cone', 'Shuttle', 'Drafted']
 del df['College']
 
 # Get Players Name
@@ -83,6 +83,14 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     logpred = logreg.predict(X[test])
     logcm = confusion_matrix(Y[test], logpred)
     print("Accuracy:", metrics.accuracy_score(Y[test], logpred))
+    
+    logfeatimp = pd.Series(logreg.feature_importances_,index=x.columns).sort_values(ascending=False)
+    sns.barplot(x=feature_imp, y=feature_imp.index)
+    plt.xlabel('Feature Importance Score')
+    plt.ylabel('Features')
+    plt.title("Visualizing Important Features")
+    plt.legend()
+    plt.show()
     
     # Random Forest
     print("===== Random Forest =====")
