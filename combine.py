@@ -15,6 +15,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import KFold
 from sklearn.metrics import confusion_matrix
 from sklearn import metrics
+import pickle
 
 combine10 = pd.read_csv("Files\combine2010.csv")
 combine11 = pd.read_csv("Files\combine2011.csv")
@@ -125,6 +126,23 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     knna = metrics.accuracy_score(Y[test], knnpred)
     knnacc.append(knna)
     print("Accuracy:", metrics.accuracy_score(Y[test], knnpred))
+    
+# Save Models
+logfile = "logisticRegression.pkl"
+with open(logfile, 'wb') as file:
+    pickle.dump(logreg, file)
+    
+rffile = "randomForest.pkl"
+with open(rffile, 'wb') as file:
+    pickle.dump(rf, file)
+
+nbfile = "naiveBayes.pkl"
+with open(nbfile, 'wb') as file:
+    pickle.dump(gnb, file)
+
+knnfile = "knn.pkl"
+with open(knnfile, 'wb') as file:
+    pickle.dump(knn, file)
     
 print("==================================================================")
 
