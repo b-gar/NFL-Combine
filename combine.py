@@ -75,6 +75,8 @@ logreg = LogisticRegression()
 rf = RandomForestClassifier()
 
 # Start K-Fold Cross-Validation
+logacc = []
+rfacc = []
 kf = KFold(n_splits=10)
 for k, (train, test) in enumerate(kf.split(X, Y)):
     
@@ -84,6 +86,8 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     logpred = logreg.predict(X[test])
     logcm = confusion_matrix(Y[test], logpred) # tn,fp,fn,tp = logcm.ravel()
     print(logcm)
+    loga = metrics.accuracy_score(Y[test], logpred)
+    logacc.append(loga)
     print("Accuracy:", metrics.accuracy_score(Y[test], logpred))
     
     # Random Forest
@@ -92,6 +96,16 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     rfpred = rf.predict(X[test])
     rfcm = confusion_matrix(Y[test], rfpred) # tn,fp,fn,tp = rfcm.ravel()
     print(rfcm)
+    rfa = metrics.accuracy_score(Y[test], rfpred)
+    rfacc.append(rfa)
     print("Accuracy:", metrics.accuracy_score(Y[test], rfpred))
-    
-    
+
+print("==================================================================")
+logmean = np.mean(logacc)
+rfmean = np.mean(rfacc)
+print("Logistic Regression Cross-Validation Mean: " + str(logmean.round(3)))
+print("Random Forest Cross-Validation Mean: " + str(rfmean.round(3)))
+if logmean > rfmean:
+    print("Logistic Regression Had a Higher Accuracy")
+else:
+    print("Random Forest Had a Higher Accuracy")
