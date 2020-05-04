@@ -10,10 +10,11 @@ import seaborn as sns
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import KFold
 from sklearn.metrics import confusion_matrix
 from sklearn import metrics
-%matplotlib inline
 
 combine10 = pd.read_csv("Files\combine2010.csv")
 combine11 = pd.read_csv("Files\combine2011.csv")
@@ -73,10 +74,15 @@ Y = y.values
 # Initialized Methods
 logreg = LogisticRegression()
 rf = RandomForestClassifier()
+gnb = GaussianNB()
+knn = KNeighborsClassifier(n_neighbors = 3)
 
 # Start K-Fold Cross-Validation
 logacc = []
 rfacc = []
+gnbacc = []
+knnacc = []
+
 kf = KFold(n_splits=10)
 for k, (train, test) in enumerate(kf.split(X, Y)):
     
@@ -99,13 +105,46 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     rfa = metrics.accuracy_score(Y[test], rfpred)
     rfacc.append(rfa)
     print("Accuracy:", metrics.accuracy_score(Y[test], rfpred))
-
+    
+     # Naive Bayes
+    print("===== Naive Bayes =====")
+    gnb.fit(X[train], Y[train])
+    gnbpred = gnb.predict(X[test])
+    gnbcm = confusion_matrix(Y[test], gnbpred) # tn,fp,fn,tp = logcm.ravel()
+    print(gnbcm)
+    gnba = metrics.accuracy_score(Y[test], gnbpred)
+    gnbacc.append(gnba)
+    print("Accuracy:", metrics.accuracy_score(Y[test], gnbpred))
+    
+    # KNN
+    print("===== K-Nearest Neighbors =====")
+    knn.fit(X[train], Y[train])
+    knnpred = knn.predict(X[test])
+    knncm = confusion_matrix(Y[test], knnpred) # tn,fp,fn,tp = logcm.ravel()
+    print(knncm)
+    knna = metrics.accuracy_score(Y[test], knnpred)
+    knnacc.append(knna)
+    print("Accuracy:", metrics.accuracy_score(Y[test], knnpred))
+    
 print("==================================================================")
+
 logmean = np.mean(logacc)
 rfmean = np.mean(rfacc)
+gnbmean = np.mean(gnbacc)
+knnmean = np.mean(knnacc)
+
 print("Logistic Regression Cross-Validation Mean: " + str(logmean.round(3)))
 print("Random Forest Cross-Validation Mean: " + str(rfmean.round(3)))
-if logmean > rfmean:
-    print("Logistic Regression Had a Higher Accuracy")
+print("Naive Bayes Cross-Validation Mean: " + str(gnbmean.round(3)))
+print("KNN Cross-Validation Mean: " + str(knnmean.round(3)))
+
+print("==================================================================")
+
+if logmean > rfmean and logmean > gnbmean and logmean > knnmean:
+    print("Logistic Regression Had the Highest Accuracy")
+elif rfmean > logmean and logmean > gnbmean and rfmean > knnmean:
+    print("Random Forest Had the Highest Accuracy")
+elif knnmean > logmean and knnmean > rfmean and knnmean > gnbmean:
+    print("KNN Had the Highest Accuracy")
 else:
-    print("Random Forest Had a Higher Accuracy")
+    print("Naive Bayes Had the Highest Accuracy")
