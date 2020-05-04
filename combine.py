@@ -82,6 +82,7 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     logreg.fit(X[train], Y[train])
     logpred = logreg.predict(X[test])
     logcm = confusion_matrix(Y[test], logpred)
+    print(logcm)
     print("Accuracy:", metrics.accuracy_score(Y[test], logpred))
     
     
@@ -91,14 +92,7 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     rf.fit(X[train], Y[train])
     rfpred = rf.predict(X[test])
     rfcm = confusion_matrix(Y[test], rfpred)
+    print(rfcm)
     print("Accuracy:", metrics.accuracy_score(Y[test], rfpred))
     
-    # Feature Importance
-    rffeatimp = pd.Series(rf.feature_importances_,index=x.columns).sort_values(ascending=False)
-    sns.barplot(x=rffeatimp, y=rffeatimp.index)
-    plt.xlabel('Feature Importance Score')
-    plt.ylabel('Features')
-    plt.title("Visualizing Important Features")
-    plt.legend()
-    plt.show()
     
