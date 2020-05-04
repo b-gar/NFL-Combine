@@ -140,11 +140,11 @@ print("KNN Cross-Validation Mean: " + str(knnmean.round(3)))
 
 print("==================================================================")
 
-if logmean > rfmean and logmean > gnbmean and logmean > knnmean:
-    print("Logistic Regression Had the Highest Accuracy")
-elif rfmean > logmean and logmean > gnbmean and rfmean > knnmean:
-    print("Random Forest Had the Highest Accuracy")
-elif knnmean > logmean and knnmean > rfmean and knnmean > gnbmean:
-    print("KNN Had the Highest Accuracy")
-else:
-    print("Naive Bayes Had the Highest Accuracy")
+feature_imp = pd.Series(rf.feature_importances_,index=x.columns).sort_values(ascending=False)
+
+sns.barplot(x=feature_imp, y=feature_imp.index)
+plt.xlabel('Feature Importance Score')
+plt.ylabel('Features')
+plt.title("Important Features ")
+plt.legend()
+plt.show()
