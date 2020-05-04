@@ -84,13 +84,7 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     logcm = confusion_matrix(Y[test], logpred)
     print("Accuracy:", metrics.accuracy_score(Y[test], logpred))
     
-    logfeatimp = pd.Series(logreg.feature_importances_,index=x.columns).sort_values(ascending=False)
-    sns.barplot(x=feature_imp, y=feature_imp.index)
-    plt.xlabel('Feature Importance Score')
-    plt.ylabel('Features')
-    plt.title("Visualizing Important Features")
-    plt.legend()
-    plt.show()
+    
     
     # Random Forest
     print("===== Random Forest =====")
@@ -98,4 +92,13 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     rfpred = rf.predict(X[test])
     rfcm = confusion_matrix(Y[test], rfpred)
     print("Accuracy:", metrics.accuracy_score(Y[test], rfpred))
+    
+    # Feature Importance
+    rffeatimp = pd.Series(rf.feature_importances_,index=x.columns).sort_values(ascending=False)
+    sns.barplot(x=rffeatimp, y=rffeatimp.index)
+    plt.xlabel('Feature Importance Score')
+    plt.ylabel('Features')
+    plt.title("Visualizing Important Features")
+    plt.legend()
+    plt.show()
     
