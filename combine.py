@@ -17,6 +17,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn import metrics
 import pickle
 
+# Import Files
 combine10 = pd.read_csv("Files\combine2010.csv")
 combine11 = pd.read_csv("Files\combine2011.csv")
 combine12 = pd.read_csv("Files\combine2012.csv")
@@ -29,7 +30,7 @@ combine18 = pd.read_csv("Files\combine2018.csv")
 combine19 = pd.read_csv("Files\combine2019.csv")
 combine20 = pd.read_csv("Files\combine2020.csv")
 
-
+# Join Into One DF
 df = pd.concat([combine12,combine13,combine14,combine15,combine16,combine17,combine18,combine18,combine20])
 df.columns = ['Player', 'Position', 'School', 'College', 'Height', 'Weight', '40Yard', 'Vertical', 'Bench', 'Broad', '3Cone', 'Shuttle', 'Drafted']
 del df['College']
@@ -78,12 +79,13 @@ rf = RandomForestClassifier()
 gnb = GaussianNB()
 knn = KNeighborsClassifier(n_neighbors = 3)
 
-# Start K-Fold Cross-Validation
+# Initialize Lists for Fold Accuracies
 logacc = []
 rfacc = []
 gnbacc = []
 knnacc = []
 
+# Start K-Fold Cross-Validation
 kf = KFold(n_splits=10)
 for k, (train, test) in enumerate(kf.split(X, Y)):
     
@@ -158,6 +160,7 @@ print("KNN Cross-Validation Mean: " + str(knnmean.round(3)))
 
 print("==================================================================")
 
+# Display Most Important Features for Random Forest
 feature_imp = pd.Series(rf.feature_importances_,index=x.columns).sort_values(ascending=False)
 
 sns.barplot(x=feature_imp, y=feature_imp.index)
