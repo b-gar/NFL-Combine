@@ -74,6 +74,7 @@ Y = y.values
 logreg = LogisticRegression()
 rf = RandomForestClassifier()
 
+# Start K-Fold Cross-Validation
 kf = KFold(n_splits=10)
 for k, (train, test) in enumerate(kf.split(X, Y)):
     
@@ -81,17 +82,15 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     print("===== Logistic Regression =====")
     logreg.fit(X[train], Y[train])
     logpred = logreg.predict(X[test])
-    logcm = confusion_matrix(Y[test], logpred)
+    logcm = confusion_matrix(Y[test], logpred) # tn,fp,fn,tp = logcm.ravel()
     print(logcm)
     print("Accuracy:", metrics.accuracy_score(Y[test], logpred))
-    
-    
     
     # Random Forest
     print("===== Random Forest =====")
     rf.fit(X[train], Y[train])
     rfpred = rf.predict(X[test])
-    rfcm = confusion_matrix(Y[test], rfpred)
+    rfcm = confusion_matrix(Y[test], rfpred) # tn,fp,fn,tp = rfcm.ravel()
     print(rfcm)
     print("Accuracy:", metrics.accuracy_score(Y[test], rfpred))
     
