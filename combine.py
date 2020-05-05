@@ -114,7 +114,7 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     rfacc.append(rfa)
     print("Accuracy:", metrics.accuracy_score(Y[test], rfpred))
     
-     # Naive Bayes
+    # Naive Bayes
     print("\n")
     print("===== Naive Bayes =====")
     gnb.fit(X[train], Y[train])
