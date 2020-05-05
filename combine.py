@@ -89,10 +89,11 @@ gnbacc = []
 knnacc = []
 
 # Start K-Fold Cross-Validation
-kf = KFold(n_splits=10)
+kf = KFold(n_splits = 10)
 for k, (train, test) in enumerate(kf.split(X, Y)):
     
     # Logistic Regression
+    print("\n")
     print("===== Logistic Regression =====")
     logreg.fit(X[train], Y[train])
     logpred = logreg.predict(X[test])
@@ -103,6 +104,7 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     print("Accuracy:", metrics.accuracy_score(Y[test], logpred))
     
     # Random Forest
+    print("\n")
     print("===== Random Forest =====")
     rf.fit(X[train], Y[train])
     rfpred = rf.predict(X[test])
@@ -113,6 +115,7 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     print("Accuracy:", metrics.accuracy_score(Y[test], rfpred))
     
      # Naive Bayes
+    print("\n")
     print("===== Naive Bayes =====")
     gnb.fit(X[train], Y[train])
     gnbpred = gnb.predict(X[test])
@@ -123,6 +126,7 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     print("Accuracy:", metrics.accuracy_score(Y[test], gnbpred))
     
     # KNN
+    print("\n")
     print("===== K-Nearest Neighbors =====")
     knn.fit(X[train], Y[train])
     knnpred = knn.predict(X[test])
