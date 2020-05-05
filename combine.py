@@ -2,7 +2,7 @@
 """
 Created on Sat May  2 18:02:30 2020
 
-@author: Owner
+@author: Ben Garski
 """
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -172,10 +172,8 @@ if levenep > 0.05:
     if anova < 0.05:
         
         # Prep Data for Tukey's
-        resultlist = logacc + rfacc + gnbacc + knnacc
-        resultlist = np.asarray(resultlist, dtype=np.float32)
-        testlist = np.array(["LogisticRegression", "RandomForest", "NaiveBayes", "KNN"])
-        testlist = np.repeat(testlist, 10)
+        resultlist = np.asarray(logacc + rfacc + gnbacc + knnacc, dtype = np.float32)
+        testlist = np.repeat(np.array(["LogisticRegression", "RandomForest", "NaiveBayes", "KNN"]), 10)
         resultdf = pd.DataFrame({"Test": testlist, "Result": resultlist})
         
         # Tukey
@@ -185,9 +183,9 @@ if levenep > 0.05:
 print("==================================================================")
 
 # Display Most Important Features for Random Forest
-feature_imp = pd.Series(rf.feature_importances_,index=x.columns).sort_values(ascending=False)
+feature_imp = pd.Series(rf.feature_importances_, index = x.columns).sort_values(ascending = False)
 
-sns.barplot(x=feature_imp, y=feature_imp.index)
+sns.barplot(x = feature_imp, y = feature_imp.index)
 plt.xlabel('Feature Importance Score')
 plt.ylabel('Features')
 plt.title("Important Features ")
