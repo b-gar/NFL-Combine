@@ -169,7 +169,9 @@ resultdf = pd.DataFrame({"Model": testlist, "Accuracy": resultlist})
       
 # Plot Model Comparison
 sns.boxplot(x = resultdf['Model'], y = resultdf['Accuracy'], width = 0.4)
-  
+plt.title("Comparing Model Accuracies Over 10 Cross-Validation Folds")
+plt.show()
+
 # Check for a Violation of ANOVA - Homogeneity of Variance
 levenep = levene(logacc, rfacc, gnbacc, knnacc)[1]
 
@@ -193,5 +195,4 @@ sns.barplot(x = feature_imp, y = feature_imp.index)
 plt.xlabel('Feature Importance Score')
 plt.ylabel('Features')
 plt.title("Important Features ")
-plt.legend()
 plt.show()
