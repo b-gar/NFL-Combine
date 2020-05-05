@@ -77,8 +77,8 @@ y = dfclean.Drafted
 Y = y.values
 
 # Initialized Methods
-logreg = LogisticRegression()
-rf = RandomForestClassifier()
+logreg = LogisticRegression(random_state = 24)
+rf = RandomForestClassifier(random_state = 24)
 gnb = GaussianNB()
 knn = KNeighborsClassifier(n_neighbors = 3)
 
