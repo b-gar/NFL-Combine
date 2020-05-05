@@ -16,6 +16,9 @@ from sklearn.model_selection import KFold
 from sklearn.metrics import confusion_matrix
 from sklearn import metrics
 import pickle
+from scipy.stats import levene
+from scipy.stats import f_oneway
+from statsmodels.stats.multicomp import pairwise_tukeyhsd
 
 # Import Files
 combine10 = pd.read_csv("Files\combine2010.csv")
@@ -157,6 +160,27 @@ print("Logistic Regression Cross-Validation Mean: " + str(logmean.round(3)))
 print("Random Forest Cross-Validation Mean: " + str(rfmean.round(3)))
 print("Naive Bayes Cross-Validation Mean: " + str(gnbmean.round(3)))
 print("KNN Cross-Validation Mean: " + str(knnmean.round(3)))
+
+# Check for a Violation of ANOVA - Homogeneity of Variance
+levenep = levene(logacc, rfacc, gnbacc, knnacc)[1]
+
+# Run ANOVA if No Violation
+if levenep > 0.05:
+    anova = f_oneway(logacc, rfacc, gnbacc, knnacc)[1]
+    
+    # Run Tukey Test if Significant to Find Which Group Differs
+    if anova < 0.05:
+        
+        # Prep Data for Tukey's
+        resultlist = logacc + rfacc + gnbacc + knnacc
+        resultlist = np.asarray(resultlist, dtype=np.float32)
+        testlist = np.array(["LogisticRegression", "RandomForest", "NaiveBayes", "KNN"])
+        testlist = np.repeat(testlist, 10)
+        resultdf = pd.DataFrame({"Test": testlist, "Result": resultlist})
+        
+        # Tukey
+        print(pairwise_tukeyhsd(resultdf['Result'], resultdf['Test']))
+
 
 print("==================================================================")
 
