@@ -162,6 +162,14 @@ print("Random Forest Cross-Validation Mean: " + str(rfmean.round(3)))
 print("Naive Bayes Cross-Validation Mean: " + str(gnbmean.round(3)))
 print("KNN Cross-Validation Mean: " + str(knnmean.round(3)))
 
+# Prep Data for Tukey's
+resultlist = np.asarray(logacc + rfacc + gnbacc + knnacc, dtype = np.float32)
+testlist = np.repeat(np.array(["LogisticRegression", "RandomForest", "NaiveBayes", "KNN"]), 10)
+resultdf = pd.DataFrame({"Model": testlist, "Accuracy": resultlist})
+      
+# Plot Model Comparison
+sns.boxplot(x = resultdf['Model'], y = resultdf['Accuracy'], width = 0.4)
+  
 # Check for a Violation of ANOVA - Homogeneity of Variance
 levenep = levene(logacc, rfacc, gnbacc, knnacc)[1]
 
@@ -171,14 +179,9 @@ if levenep > 0.05:
     
     # Run Tukey Test if Significant to Find Which Group Differs
     if anova < 0.05:
-        
-        # Prep Data for Tukey's
-        resultlist = np.asarray(logacc + rfacc + gnbacc + knnacc, dtype = np.float32)
-        testlist = np.repeat(np.array(["LogisticRegression", "RandomForest", "NaiveBayes", "KNN"]), 10)
-        resultdf = pd.DataFrame({"Test": testlist, "Result": resultlist})
-        
+      
         # Tukey
-        print(pairwise_tukeyhsd(resultdf['Result'], resultdf['Test']))
+        print(pairwise_tukeyhsd(resultdf['Accuracy'], resultdf['Model']))
 
 
 print("==================================================================")
