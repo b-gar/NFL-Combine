@@ -151,6 +151,7 @@ with open(knnfile, 'wb') as file:
     
 print("==================================================================")
 
+# Display the Mean Accuracy From Cross-Validation
 logmean = np.mean(logacc)
 rfmean = np.mean(rfacc)
 gnbmean = np.mean(gnbacc)
