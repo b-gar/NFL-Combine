@@ -38,6 +38,12 @@ df = pd.concat([combine12,combine13,combine14,combine15,combine16,combine17,comb
 df.columns = ['Player', 'Position', 'School', 'College', 'Height', 'Weight', '40Yard', 'Vertical', 'Bench', 'Broad', '3Cone', 'Shuttle', 'Drafted']
 del df['College']
 
+# Drop Rows if Missed > 2 Tests
+df = df.dropna(subset = ['40Yard', 'Vertical', 'Bench', 'Broad', '3Cone', 'Shuttle'], thresh = 4)
+
+# Imputation for Na's
+df = df.apply(lambda x: x.fillna(x.mean()) if x.dtypes != 'O' else x) 
+
 # Get Players Name
 df[['Name', 'ID']] = df.Player.apply(lambda x: pd.Series(str(x).split("\\")))
 del df['Player']
@@ -55,21 +61,18 @@ df['Drafted'] = df['Drafted'].notnull().astype(int)
 dfohe = pd.concat([pd.get_dummies(df['Position']), df], axis = 1)
 dfohe = dfohe.drop(['Feet', 'Inches', 'Position', 'ID'], axis = 1)
 
-# Normalize
+# Get Numerical Columns
 normCols = ['Height', 'Weight', '40Yard', 'Vertical', 'Bench', 'Broad', '3Cone', 'Shuttle']
 dfnorm = df[normCols]
-dfnorm=(dfnorm-dfnorm.mean())/dfnorm.std()
 
-# Get Final DF and Drop NA's
+# Normalize
+dfnorm = (dfnorm-dfnorm.mean())/dfnorm.std()
+
+# Join DF's from Above
 dfclean = pd.concat([dfohe.drop(normCols, axis=1), dfnorm], axis = 1)
-dfclean = dfclean.dropna()
 
 # Get Features
-ints1 = np.arange(0,25,1)
-ints2 = np.arange(28,36,1)
-ints = np.concatenate((ints1,ints2), axis=0).tolist()
-
-x = dfclean.iloc[:,ints]
+x = dfclean.drop(['School', 'Name', 'Drafted'], axis = 1)
 X = x.values
 
 # Get Target
@@ -77,8 +80,8 @@ y = dfclean.Drafted
 Y = y.values
 
 # Initialized Methods
-logreg = LogisticRegression(random_state = 24)
-rf = RandomForestClassifier(random_state = 24)
+logreg = LogisticRegression(random_state = 1)
+rf = RandomForestClassifier(random_state = 1)
 gnb = GaussianNB()
 knn = KNeighborsClassifier(n_neighbors = 3)
 
