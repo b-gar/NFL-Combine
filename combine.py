@@ -145,7 +145,7 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     print(logcm)
     loga = metrics.accuracy_score(Y[test], logpred)
     logacc.append(loga)
-    print("Accuracy:", metrics.accuracy_score(Y[test], logpred))
+    print("Accuracy:", round(metrics.accuracy_score(Y[test], logpred),2))
     
     # Random Forest
     print("\n")
@@ -161,7 +161,7 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     print(rfcm)
     rfa = metrics.accuracy_score(Y[test], rfpred)
     rfacc.append(rfa)
-    print("Accuracy:", metrics.accuracy_score(Y[test], rfpred))
+    print("Accuracy:", round(metrics.accuracy_score(Y[test], rfpred),2))
     
     # Naive Bayes
     print("\n")
@@ -177,7 +177,7 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     print(gnbcm)
     gnba = metrics.accuracy_score(Y[test], gnbpred)
     gnbacc.append(gnba)
-    print("Accuracy:", metrics.accuracy_score(Y[test], gnbpred))
+    print("Accuracy:", round(metrics.accuracy_score(Y[test], gnbpred),2))
     
     # KNN
     print("\n")
@@ -193,7 +193,7 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     print(knncm)
     knna = metrics.accuracy_score(Y[test], knnpred)
     knnacc.append(knna)
-    print("Accuracy:", metrics.accuracy_score(Y[test], knnpred))
+    print("Accuracy:", round(metrics.accuracy_score(Y[test], knnpred),2))
     
 # Save Models
 logfile = "logisticRegression.pkl"
