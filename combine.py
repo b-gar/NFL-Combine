@@ -127,6 +127,12 @@ rfacc = []
 gnbacc = []
 knnacc = []
 
+# Initialize Lists for Fold FPR
+logfpr = []
+rffpr = []
+gnbfpr = []
+knnfpr = []
+
 # Start K-Fold Cross-Validation
 kf = KFold(n_splits = 10)
 for k, (train, test) in enumerate(kf.split(X, Y)):
@@ -137,13 +143,15 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     logreg.fit(X[train], Y[train])
     logpred = logreg.predict(X[test])
     logcm = confusion_matrix(Y[test], logpred)
-    tn,fp,fn,tp = logcm.ravel()
-    print("Sensitivity: " + str(round(tp/(tp+fn),2)))
-    print("Specificity: " + str(round(tn/(tn+fp),2)))
-    print("False Negative Rate: " + str(round(fn/(fn+tp),2)))
-    print("False Positive Rate: " + str(round(fp/(fp+tn),2)))
+    logtn,logfp,logfn,logtp = logcm.ravel()
+    print("Sensitivity: " + str(round(logtp/(logtp+logfn),2)))
+    print("Specificity: " + str(round(logtn/(logtn+logfp),2)))
+    print("False Negative Rate: " + str(round(logfn/(logfn+logtp),2)))
+    print("False Positive Rate: " + str(round(logfp/(logfp+logtn),2)))
     print(logcm)
+    logf = logfp/(logfp+logtn)
     loga = metrics.accuracy_score(Y[test], logpred)
+    logfpr.append(logf)
     logacc.append(loga)
     print("Accuracy:", round(metrics.accuracy_score(Y[test], logpred),2))
     
@@ -153,13 +161,15 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     rf.fit(X[train], Y[train])
     rfpred = rf.predict(X[test])
     rfcm = confusion_matrix(Y[test], rfpred)
-    tn,fp,fn,tp = rfcm.ravel()
-    print("Sensitivity: " + str(round(tp/(tp+fn),2)))
-    print("Specificity: " + str(round(tn/(tn+fp),2)))
-    print("False Negative Rate: " + str(round(fn/(fn+tp),2)))
-    print("False Positive Rate: " + str(round(fp/(fp+tn),2)))
+    rftn,rffp,rffn,rftp = rfcm.ravel()
+    print("Sensitivity: " + str(round(rftp/(rftp+rffn),2)))
+    print("Specificity: " + str(round(rftn/(rftn+rffp),2)))
+    print("False Negative Rate: " + str(round(rffn/(rffn+rftp),2)))
+    print("False Positive Rate: " + str(round(rffp/(rffp+rftn),2)))
     print(rfcm)
+    rff = rffp/(rffp+rftn)
     rfa = metrics.accuracy_score(Y[test], rfpred)
+    rffpr.append(rff)
     rfacc.append(rfa)
     print("Accuracy:", round(metrics.accuracy_score(Y[test], rfpred),2))
     
@@ -169,13 +179,15 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     gnb.fit(X[train], Y[train])
     gnbpred = gnb.predict(X[test])
     gnbcm = confusion_matrix(Y[test], gnbpred)
-    tn,fp,fn,tp = gnbcm.ravel()
-    print("Sensitivity: " + str(round(tp/(tp+fn),2)))
-    print("Specificity: " + str(round(tn/(tn+fp),2)))
-    print("False Negative Rate: " + str(round(fn/(fn+tp),2)))
-    print("False Positive Rate: " + str(round(fp/(fp+tn),2)))
+    gnbtn,gnbfp,gnbfn,gnbtp = gnbcm.ravel()
+    print("Sensitivity: " + str(round(gnbtp/(gnbtp+gnbfn),2)))
+    print("Specificity: " + str(round(gnbtn/(gnbtn+gnbfp),2)))
+    print("False Negative Rate: " + str(round(gnbfn/(gnbfn+gnbtp),2)))
+    print("False Positive Rate: " + str(round(gnbfp/(gnbfp+gnbtn),2)))
     print(gnbcm)
+    gnbf = gnbfp/(gnbfp+gnbtn)
     gnba = metrics.accuracy_score(Y[test], gnbpred)
+    gnbfpr.append(gnbf)
     gnbacc.append(gnba)
     print("Accuracy:", round(metrics.accuracy_score(Y[test], gnbpred),2))
     
@@ -185,13 +197,15 @@ for k, (train, test) in enumerate(kf.split(X, Y)):
     knn.fit(X[train], Y[train])
     knnpred = knn.predict(X[test])
     knncm = confusion_matrix(Y[test], knnpred)
-    tn,fp,fn,tp = knncm.ravel()
-    print("Sensitivity: " + str(round(tp/(tp+fn),2)))
-    print("Specificity: " + str(round(tn/(tn+fp),2)))
-    print("False Negative Rate: " + str(round(fn/(fn+tp),2)))
-    print("False Positive Rate: " + str(round(fp/(fp+tn),2)))
+    knntn,knnfp,knnfn,knntp = knncm.ravel()
+    print("Sensitivity: " + str(round(knntp/(knntp+knnfn),2)))
+    print("Specificity: " + str(round(knntn/(knntn+knnfp),2)))
+    print("False Negative Rate: " + str(round(knnfn/(knnfn+knntp),2)))
+    print("False Positive Rate: " + str(round(knnfp/(knnfp+knntn),2)))
     print(knncm)
+    knnf = knnfp/(knnfp+knntn)
     knna = metrics.accuracy_score(Y[test], knnpred)
+    knnfpr.append(knnf)
     knnacc.append(knna)
     print("Accuracy:", round(metrics.accuracy_score(Y[test], knnpred),2))
     
