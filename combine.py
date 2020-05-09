@@ -35,8 +35,21 @@ combine20 = pd.read_csv("Files\combine2020.csv")
 
 # Join Into One DF
 df = pd.concat([combine12,combine13,combine14,combine15,combine16,combine17,combine18,combine18,combine20])
+
+# Rename Columns
 df.columns = ['Player', 'Position', 'School', 'College', 'Height', 'Weight', '40Yard', 'Vertical', 'Bench', 'Broad', '3Cone', 'Shuttle', 'Drafted']
+
+# Drop College Column and Duplicates
 del df['College']
+df = df.drop_duplicates(subset = "Player")
+
+# Data Exploration
+df.describe()
+df.isnull().sum().sort_values(ascending=False)
+(df.isnull().sum()/df.isnull().count()).sort_values(ascending=False)
+sns.heatmap(df.corr(), annot=True, square=True)
+
+df.apply(pd.Series.nunique).sort_values(ascending=False)
 
 # Drop Rows if Missed > 2 Tests
 df = df.dropna(subset = ['40Yard', 'Vertical', 'Bench', 'Broad', '3Cone', 'Shuttle'], thresh = 4)
