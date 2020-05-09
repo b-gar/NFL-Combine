@@ -48,7 +48,6 @@ df.describe()
 df.isnull().sum().sort_values(ascending=False)
 (df.isnull().sum()/df.isnull().count()).sort_values(ascending=False)
 sns.heatmap(df.corr(), annot=True, square=True)
-
 df.apply(pd.Series.nunique).sort_values(ascending=False)
 
 # Drop Rows if Missed > 2 Tests
