@@ -43,18 +43,42 @@ df.columns = ['Player', 'Position', 'School', 'College', 'Height', 'Weight', '40
 del df['College']
 df = df.drop_duplicates(subset = "Player")
 
-# Data Exploration
-df.describe()
+# Check Position Levels
+df.Position.value_counts()
+
+# Remove DB and NT for Lack of Data
+df = df[df.Position != 'DB']
+df = df[df.Position != 'NT']
+
+# Get Number and Percent of Missing Values by Column
 df.isnull().sum().sort_values(ascending=False)
 (df.isnull().sum()/df.isnull().count()).sort_values(ascending=False)
+
+# Check Descriptive Stats and Correlation Matrix
+df.describe()
 sns.heatmap(df.corr(), annot=True, square=True)
+
+# Check Unique Value Counts by Column
 df.apply(pd.Series.nunique).sort_values(ascending=False)
 
-# Drop Rows if Missed > 2 Tests
+# Check Position Numbers Before Imputation
+df.groupby('Position').count()
+df.groupby('Position').median()
+
+# Kickers and Punters Missing Most of the Testing Data
+df = df[df.Position != 'K']
+df = df[df.Position != 'P']
+
+# Drop Athletes who Missed More than 2 Tests
 df = df.dropna(subset = ['40Yard', 'Vertical', 'Bench', 'Broad', '3Cone', 'Shuttle'], thresh = 4)
 
-# Imputation for Na's
-df = df.apply(lambda x: x.fillna(x.mean()) if x.dtypes != 'O' else x) 
+# Imputate NA's of Position Group Medians
+df['40Yard'] = df['40Yard'].fillna(df.groupby('Position')['40Yard'].transform('median'))
+df['Vertical'] = df['Vertical'].fillna(df.groupby('Position')['Vertical'].transform('median'))
+df['Bench'] = df['Bench'].fillna(df.groupby('Position')['Bench'].transform('median'))
+df['Broad'] = df['Broad'].fillna(df.groupby('Position')['Broad'].transform('median'))
+df['3Cone'] = df['3Cone'].fillna(df.groupby('Position')['3Cone'].transform('median'))
+df['Shuttle'] = df['Shuttle'].fillna(df.groupby('Position')['Shuttle'].transform('median'))
 
 # Get Players Name
 df[['Name', 'ID']] = df.Player.apply(lambda x: pd.Series(str(x).split("\\")))
