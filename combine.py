@@ -239,14 +239,24 @@ print("Random Forest Cross-Validation Mean: " + str(rfmean.round(3)))
 print("Naive Bayes Cross-Validation Mean: " + str(gnbmean.round(3)))
 print("KNN Cross-Validation Mean: " + str(knnmean.round(3)))
 
-# Prep Data for Tukey's
+# Dataframe for Accuracy Comparison & Tukey's Test
 resultlist = np.asarray(logacc + rfacc + gnbacc + knnacc, dtype = np.float32)
 testlist = np.repeat(np.array(["LogisticRegression", "RandomForest", "NaiveBayes", "KNN"]), 10)
 resultdf = pd.DataFrame({"Model": testlist, "Accuracy": resultlist})
-      
-# Plot Model Comparison
+    
+# Dataframe for FPR Comparison  
+resultlist2 = np.asarray(logfpr + rffpr + gnbfpr + knnfpr, dtype = np.float32)
+testlist2 = np.repeat(np.array(["LogisticRegression", "RandomForest", "NaiveBayes", "KNN"]), 10)
+resultdf2 = pd.DataFrame({"Model": testlist2, "FPR": resultlist2})
+
+# Plot Model Comparison for Accuracies
 sns.boxplot(x = resultdf['Model'], y = resultdf['Accuracy'], width = 0.4)
 plt.title("Comparing Model Accuracies Over 10 Cross-Validation Folds")
+plt.show()
+
+# Plot Model Comparison for FPR
+sns.boxplot(x = resultdf2['Model'], y = resultdf2['FPR'], width = 0.4)
+plt.title("Comparing Model FPR Over 10 Cross-Validation Folds")
 plt.show()
 
 # Check for a Violation of ANOVA - Homogeneity of Variance
