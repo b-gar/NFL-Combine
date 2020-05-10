@@ -251,18 +251,17 @@ testlist2 = np.repeat(np.array(["LogisticRegression", "RandomForest", "NaiveBaye
 resultdf2 = pd.DataFrame({"Model": testlist2, "FPR": resultlist2})
 
 # Plot Model Comparison for Accuracies
+sns.set_context("notebook", rc = {'axes.labelsize':18,'axes.titlesize':20})
 sns.boxplot(x = resultdf['Model'], y = resultdf['Accuracy'], width = 0.4)
 plt.title("Comparing Model Accuracies Over 10 Cross-Validation Folds")
+plt.xlabel('')
 plt.show()
 
 # Plot Model Comparison for FPR
-plt.figure(figsize=(8,5))
 sns.set_context("notebook", rc = {'axes.labelsize':18,'axes.titlesize':20})
 sns.boxplot(x = resultdf2['Model'], y = resultdf2['FPR'], width = 0.4)
-sns.despine()
 plt.title("Comparing Model FPR Over 10 Cross-Validation Folds")
 plt.xlabel('')
-plt.xticks(rotation=45)
 plt.show()
 
 # Check for a Violation of ANOVA - Homogeneity of Variance
@@ -284,11 +283,9 @@ print("==================================================================")
 # Display Most Important Features for Random Forest
 feature_imp = pd.Series(rf.feature_importances_, index = x.columns).sort_values(ascending = False)
 
-plt.figure(figsize=(12,8))
+sns.set_context("notebook", rc = {'axes.labelsize':18,'axes.titlesize':20})
 sns.barplot(x = feature_imp, y = feature_imp.index)
-sns.despine()
 plt.xlabel('Feature Importance Score')
 plt.ylabel('Features')
 plt.title("Important Features ")
-plt.xticks(rotation=45)
 plt.show()
