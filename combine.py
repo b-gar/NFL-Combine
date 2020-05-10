@@ -56,6 +56,7 @@ df.isnull().sum().sort_values(ascending=False)
 
 # Check Descriptive Stats and Correlation Matrix
 df.describe()
+plt.figure(figsize=(15,6))
 sns.heatmap(df.corr(), annot=True, square=True)
 
 # Check Unique Value Counts by Column
@@ -255,8 +256,13 @@ plt.title("Comparing Model Accuracies Over 10 Cross-Validation Folds")
 plt.show()
 
 # Plot Model Comparison for FPR
+plt.figure(figsize=(8,5))
+sns.set_context("notebook", rc = {'axes.labelsize':18,'axes.titlesize':20})
 sns.boxplot(x = resultdf2['Model'], y = resultdf2['FPR'], width = 0.4)
+sns.despine()
 plt.title("Comparing Model FPR Over 10 Cross-Validation Folds")
+plt.xlabel('')
+plt.xticks(rotation=45)
 plt.show()
 
 # Check for a Violation of ANOVA - Homogeneity of Variance
@@ -278,8 +284,11 @@ print("==================================================================")
 # Display Most Important Features for Random Forest
 feature_imp = pd.Series(rf.feature_importances_, index = x.columns).sort_values(ascending = False)
 
+plt.figure(figsize=(12,8))
 sns.barplot(x = feature_imp, y = feature_imp.index)
+sns.despine()
 plt.xlabel('Feature Importance Score')
 plt.ylabel('Features')
 plt.title("Important Features ")
+plt.xticks(rotation=45)
 plt.show()
