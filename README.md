@@ -1,7 +1,7 @@
 # NFL Combine/Draft Classification
 ## Predicting if a player will be drafted based off their combine numbers
 
-[Jupyter Notebook](https://github.com/blg-uwm/NFL-Combine/blob/master/combine.ipynb)
+[Jupyter Notebook](https://github.com/b-gar/NFL-Combine/blob/master/combine.ipynb)
 
 <br>
 
